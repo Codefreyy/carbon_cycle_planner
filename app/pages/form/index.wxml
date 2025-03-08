@@ -1,0 +1,283 @@
+<view class="container">
+  <view class="card">
+    <view class="title text-center">基本信息</view>
+    <view class="subtitle">这些数据将用于计算您的基础代谢率(BMR)</view>
+    
+    <view class="form-group">
+      <view class="form-label">性别</view>
+      <radio-group bindchange="onGenderChange">
+        <label class="radio-item">
+          <radio value="男" checked="{{gender === '男'}}" color="#1a73e8" />男
+        </label>
+        <label class="radio-item">
+          <radio value="女" checked="{{gender === '女'}}" color="#1a73e8" />女
+        </label>
+      </radio-group>
+    </view>
+    
+    <view class="form-group">
+      <view class="form-label">年龄 (岁)</view>
+      <view class="form-desc">年龄会影响基础代谢率的计算</view>
+      <input class="form-input" type="number" value="{{age}}" bindblur="onAgeChange" placeholder="请输入年龄"/>
+    </view>
+    
+    <view class="form-group">
+      <view class="form-label">身高 (cm)</view>
+      <view class="form-desc">身高是计算BMR的重要参数之一</view>
+      <input class="form-input" type="digit" value="{{height}}" bindblur="onHeightChange" placeholder="请输入身高"/>
+    </view>
+    
+    <view class="form-group">
+      <view class="form-label">体重 (kg)</view>
+      <view class="form-desc">体重直接影响您的每日能量需求</view>
+      <input class="form-input" type="digit" value="{{weight}}" bindblur="onWeightChange" placeholder="请输入体重"/>
+    </view>
+  </view>
+  
+  <view class="card">
+    <view class="title">活动水平</view>
+    <view class="subtitle">您的日常活动强度将影响每日总能量消耗(TDEE)</view>
+    <radio-group bindchange="onActivityLevelChange">
+      <view class="radio-list">
+        <label class="radio-item">
+          <radio value="久坐" checked="{{activityLevel === '久坐'}}" color="#1a73e8" />
+          <view class="radio-label">
+            <text class="radio-title">久坐</text>
+            <text class="radio-desc">极少运动，大部分时间坐着或躺着</text>
+          </view>
+        </label>
+        
+        <label class="radio-item">
+          <radio value="轻度活动" checked="{{activityLevel === '轻度活动'}}" color="#1a73e8" />
+          <view class="radio-label">
+            <text class="radio-title">轻度活动</text>
+            <text class="radio-desc">每周运动1-3次，日常活动较少</text>
+          </view>
+        </label>
+        
+        <label class="radio-item">
+          <radio value="中度活动" checked="{{activityLevel === '中度活动'}}" color="#1a73e8" />
+          <view class="radio-label">
+            <text class="radio-title">中度活动</text>
+            <text class="radio-desc">每周运动3-5次，日常活动适中</text>
+          </view>
+        </label>
+        
+        <label class="radio-item">
+          <radio value="高度活动" checked="{{activityLevel === '高度活动'}}" color="#1a73e8" />
+          <view class="radio-label">
+            <text class="radio-title">高度活动</text>
+            <text class="radio-desc">每周运动6-7次，日常活动量大</text>
+          </view>
+        </label>
+        
+        <label class="radio-item">
+          <radio value="极高活动" checked="{{activityLevel === '极高活动'}}" color="#1a73e8" />
+          <view class="radio-label">
+            <text class="radio-title">极高活动</text>
+            <text class="radio-desc">体力劳动者或专业运动员</text>
+          </view>
+        </label>
+      </view>
+    </radio-group>
+  </view>
+  
+  <view class="card" wx:if="{{showCalculationResult}}">
+    <view class="title">计算结果</view>
+    <view class="subtitle">根据您的基本信息计算得出的结果</view>
+    
+    <view class="calculation-result">
+      <view class="result-item">
+        <text class="result-label">基础代谢率(BMR)</text>
+        <text class="result-value">{{calculatedBMR}} 千卡</text>
+      </view>
+      <view class="result-formula">
+        <text>计算公式: 9.99 × {{weight}} + 6.25 × {{height}} - 4.92 × {{age}} + (166 × {{gender === '男' ? 1 : 0}} - 161)</text>
+      </view>
+      
+      <view class="result-item">
+        <text class="result-label">每日总能量消耗(TDEE)</text>
+        <text class="result-value">{{calculatedTDEE}} 千卡</text>
+      </view>
+      <view class="result-formula">
+        <text>计算公式: {{calculatedBMR}} × {{activityFactors[activityLevel]}}</text>
+      </view>
+      
+      <view class="form-group">
+        <view class="form-label">热量缺口 (千卡/天)</view>
+        <view class="form-desc">正数表示减少摄入量，负数表示增加摄入量</view>
+        <input class="form-input" type="digit" value="{{calorieDeficit}}" bindblur="onCalorieDeficitChange" placeholder="请输入热量缺口"/>
+      </view>
+      
+      <view class="result-item">
+        <text class="result-label">每日可摄入热量</text>
+        <text class="result-value">{{dailyCalories}} 千卡</text>
+      </view>
+      <view class="result-formula">
+        <text>计算公式: {{calculatedTDEE}} - {{calorieDeficit}}</text>
+      </view>
+    </view>
+  </view>
+  
+  <view class="card" wx:if="{{showCalculationResult}}">
+    <view class="title">营养素配置</view>
+    <view class="subtitle">设置高碳日和低碳日的营养素分配</view>
+    
+    <view class="nutrition-tabs">
+      <view class="tab {{activeTab === 'high' ? 'active' : ''}}" bindtap="switchTab" data-tab="high">高碳日</view>
+      <view class="tab {{activeTab === 'low' ? 'active' : ''}}" bindtap="switchTab" data-tab="low">低碳日</view>
+    </view>
+    
+    <view class="nutrition-content" wx:if="{{activeTab === 'high'}}">
+      <view class="form-group">
+        <view class="form-label">蛋白质 (g/kg体重)</view>
+        <view class="form-desc">高碳日的蛋白质摄入量</view>
+        <input class="form-input" type="digit" value="{{highCarbProtein}}" bindblur="onHighCarbProteinChange" placeholder="请输入蛋白质摄入量"/>
+        <view class="nutrition-calories">
+          <text>{{highCarbProteinCalories}} 千卡 ({{highCarbProteinPercentage}}%)</text>
+          <text class="nutrition-formula">计算公式: {{highCarbProtein}} × {{weight}} × 4</text>
+        </view>
+      </view>
+      
+      <view class="form-group">
+        <view class="form-label">碳水化合物 (g/kg体重)</view>
+        <view class="form-desc">高碳日的碳水化合物摄入量</view>
+        <input class="form-input" type="digit" value="{{highCarbCarbs}}" bindblur="onHighCarbCarbsChange" placeholder="请输入碳水化合物摄入量"/>
+        <view class="nutrition-calories">
+          <text>{{highCarbCarbsCalories}} 千卡 ({{highCarbCarbsPercentage}}%)</text>
+          <text class="nutrition-formula">计算公式: {{highCarbCarbs}} × {{weight}} × 4</text>
+        </view>
+      </view>
+      
+      <view class="form-group">
+        <view class="form-label">脂肪 (g/kg体重)</view>
+        <view class="form-desc">高碳日的脂肪摄入量 (自动计算)</view>
+        <input class="form-input" type="digit" value="{{highCarbFat}}" disabled placeholder="自动计算"/>
+        <view class="nutrition-calories">
+          <text>{{highCarbFatCalories}} 千卡 ({{highCarbFatPercentage}}%)</text>
+          <text class="nutrition-formula">计算公式: {{highCarbFat}} × {{weight}} × 9</text>
+        </view>
+      </view>
+      
+      <view class="total-calories">
+        <text class="total-label">总热量:</text>
+        <text class="total-value">{{highCarbTotalCalories}} 千卡</text>
+      </view>
+    </view>
+    
+    <view class="nutrition-content" wx:if="{{activeTab === 'low'}}">
+      <view class="form-group">
+        <view class="form-label">蛋白质 (g/kg体重)</view>
+        <view class="form-desc">低碳日的蛋白质摄入量</view>
+        <input class="form-input" type="digit" value="{{lowCarbProtein}}" bindblur="onLowCarbProteinChange" placeholder="请输入蛋白质摄入量"/>
+        <view class="nutrition-calories">
+          <text>{{lowCarbProteinCalories}} 千卡 ({{lowCarbProteinPercentage}}%)</text>
+          <text class="nutrition-formula">计算公式: {{lowCarbProtein}} × {{weight}} × 4</text>
+        </view>
+      </view>
+      
+      <view class="form-group">
+        <view class="form-label">碳水化合物 (g/kg体重)</view>
+        <view class="form-desc">低碳日的碳水化合物摄入量</view>
+        <input class="form-input" type="digit" value="{{lowCarbCarbs}}" bindblur="onLowCarbCarbsChange" placeholder="请输入碳水化合物摄入量"/>
+        <view class="nutrition-calories">
+          <text>{{lowCarbCarbsCalories}} 千卡 ({{lowCarbCarbsPercentage}}%)</text>
+          <text class="nutrition-formula">计算公式: {{lowCarbCarbs}} × {{weight}} × 4</text>
+        </view>
+      </view>
+      
+      <view class="form-group">
+        <view class="form-label">脂肪 (g/kg体重)</view>
+        <view class="form-desc">低碳日的脂肪摄入量 (自动计算)</view>
+        <input class="form-input" type="digit" value="{{lowCarbFat}}" disabled placeholder="自动计算"/>
+        <view class="nutrition-calories">
+          <text>{{lowCarbFatCalories}} 千卡 ({{lowCarbFatPercentage}}%)</text>
+          <text class="nutrition-formula">计算公式: {{lowCarbFat}} × {{weight}} × 9</text>
+        </view>
+      </view>
+      
+      <view class="total-calories">
+        <text class="total-label">总热量:</text>
+        <text class="total-value">{{lowCarbTotalCalories}} 千卡</text>
+      </view>
+    </view>
+  </view>
+  
+  <view class="card" wx:if="{{showCalculationResult}}">
+    <view class="title">碳水循环安排</view>
+    <view class="subtitle">设置您的碳水循环模式</view>
+    
+    <view class="form-group">
+      <view class="form-label">循环模式</view>
+      <view class="form-desc">设置低碳日和高碳日的循环方式</view>
+      
+      <view class="cycle-config">
+        <view class="cycle-input-group">
+          <text class="cycle-label">连续低碳日数量</text>
+          <input class="cycle-input" type="number" value="{{lowCarbDaysCount}}" bindblur="onLowCarbDaysCountChange" placeholder="例如：3"/>
+        </view>
+        <text class="cycle-separator">+</text>
+        <view class="cycle-input-group">
+          <text class="cycle-label">连续高碳日数量</text>
+          <input class="cycle-input" type="number" value="{{highCarbDaysCount}}" bindblur="onHighCarbDaysCountChange" placeholder="例如：1"/>
+        </view>
+      </view>
+      
+      <view class="cycle-preview">
+        <text class="cycle-preview-text">循环预览：</text>
+        <view class="cycle-pattern">
+          <view wx:for="{{cyclePattern}}" wx:key="index" class="cycle-day {{item === 'L' ? 'low-carb' : 'high-carb'}}">
+            {{item}}
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <view class="form-group">
+      <view class="form-label">开始日期</view>
+      <view class="form-desc">选择开始执行计划的日期</view>
+      <picker mode="date" value="{{startDate}}" start="{{today}}" bindchange="onStartDateChange">
+        <view class="date-picker">
+          <text>{{startDate || '请选择开始日期'}}</text>
+          <text class="picker-arrow">▼</text>
+        </view>
+      </picker>
+    </view>
+    
+    <view class="form-group" wx:if="{{startDate}}">
+      <view class="form-label">月度计划预览</view>
+      <view class="month-calendar">
+        <view class="calendar-header">
+          <text wx:for="{{weekDays}}" wx:key="index" class="week-day-header">{{item}}</text>
+        </view>
+        <view class="calendar-body">
+          <view wx:for="{{calendarDays}}" wx:key="date" class="calendar-day {{item.type}} {{item.isStart ? 'start' : ''}}">
+            <text class="calendar-date {{item.isToday ? 'today' : ''}} {{item.isStart ? 'start-date' : ''}}">{{item.day}}</text>
+          </view>
+        </view>
+      </view>
+      <view class="calendar-legend">
+        <view class="legend-item">
+          <view class="legend-color high-carb"></view>
+          <text class="legend-text">高碳日</text>
+        </view>
+        <view class="legend-item">
+          <view class="legend-color low-carb"></view>
+          <text class="legend-text">低碳日</text>
+        </view>
+        <view class="legend-item">
+          <view class="legend-color today"></view>
+          <text class="legend-text">今天</text>
+        </view>
+        <view class="legend-item">
+          <view class="legend-color start-date"></view>
+          <text class="legend-text">开始日期</text>
+        </view>
+      </view>
+    </view>
+
+    <button class="btn-primary" bindtap="generatePlan">生成碳循环计划</button>
+  </view>
+  
+  <button class="btn-calculate" bindtap="calculateNutrition" wx:if="{{!showCalculationResult}}">计算营养需求</button>
+</view> 

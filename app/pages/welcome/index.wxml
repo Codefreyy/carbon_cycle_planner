@@ -1,0 +1,37 @@
+<view class="container">
+  <view class="header">
+    <image class="logo" src="/images/logo.png" mode="aspectFit"></image>
+    <view class="title">碳循环刷脂计划</view>
+    <view class="subtitle">胖胖</view>
+  </view>
+
+  <view class="content">
+    <view class="card">
+      <view class="card-title">什么是碳循环？</view>
+      <view class="card-content">
+        碳循环是一种科学的饮食策略，通过调节每日碳水化合物的摄入量来优化身体的代谢和激素水平。通过在训练日和非训练日合理分配碳水化合物的摄入，可以提高训练表现和恢复能力、促进脂肪燃烧、保持肌肉量、提升新陈代谢。
+      </view>
+    </view>
+
+    <view class="card">
+      <view class="card-title">为什么选择碳循环？</view>
+      <view class="card-content">
+        <view class="feature-item">
+          <text class="feature-title">🎯 个性化方案</text>
+          <text class="feature-desc">根据身体数据、活动水平和训练计划，量身定制饮食方案</text>
+        </view>
+        <view class="feature-item">
+          <text class="feature-title">📊 科学计算</text>
+          <text class="feature-desc">基于BMR（基础代谢率）和TDEE（每日总能量消耗）精确计算营养需求</text>
+        </view>
+        <view class="feature-item">
+          <text class="feature-title">🔄 灵活调整</text>
+          <text class="feature-desc">在保持总体热量平衡的同时，让饮食更有弹性</text>
+        </view>
+      </view>
+    </view>
+    <button class="btn-primary" bindtap="startPlan">开始制定计划</button>
+  </view>
+
+
+</view> 

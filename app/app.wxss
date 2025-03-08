@@ -1,0 +1,79 @@
+/**app.wxss**/
+page {
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333;
+  background-color: #f8f9fa;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 12rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20rpx;
+  color: #1a73e8;
+}
+
+.subtitle {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 20rpx 0;
+  color: #444;
+}
+
+.btn-primary {
+  background-color: #1a73e8;
+  color: #fff;
+  border: none;
+  border-radius: 8rpx;
+  padding: 20rpx 0;
+  font-size: 16px;
+  font-weight: 500;
+  /* margin-top: 30rpx; */
+}
+
+.btn-primary:active {
+  background-color: #1765cc;
+}
+
+.form-group {
+  margin-bottom: 20rpx;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 10rpx;
+  font-weight: 500;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-primary {
+  color: #1a73e8;
+}
+
+.mt-20 {
+  margin-top: 20rpx;
+}
+
+.mb-20 {
+  margin-bottom: 20rpx;
+} 

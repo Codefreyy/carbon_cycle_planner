@@ -1,0 +1,38 @@
+.radio-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.radio-list {
+  margin-top: 10rpx;
+}
+
+.radio-label {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10rpx;
+}
+
+.radio-title {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.radio-desc {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4rpx;
+}
+
+slider {
+  margin: 15rpx 0;
+}
+
+.btn-primary {
+  width: 90%;
+  margin: 0 auto;
+  position: fixed;
+  bottom: 150rpx;
+  left: 25%;
+}

@@ -1,0 +1,177 @@
+<view class="container">
+  <view class="header">
+    <view class="title">您的碳循环计划</view>
+    <view class="subtitle">根据您的数据定制的个性化方案</view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">基础数据</view>
+    <view class="data-grid">
+      <view class="data-item">
+        <text class="data-label">基础代谢率(BMR)</text>
+        <text class="data-value">{{planData.stats.bmr}} 千卡</text>
+      </view>
+      <view class="data-item">
+        <text class="data-label">每日总能量消耗(TDEE)</text>
+        <text class="data-value">{{planData.stats.tdee}} 千卡</text>
+      </view>
+      <view class="data-item">
+        <text class="data-label">热量缺口</text>
+        <text class="data-value">{{planData.stats.calorieDeficit}} 千卡</text>
+      </view>
+      <view class="data-item">
+        <text class="data-label">每日可摄入热量</text>
+        <text class="data-value">{{planData.stats.dailyCalories}} 千卡</text>
+      </view>
+    </view>
+
+    <view class="calculation-toggle" bindtap="toggleCalculationDetails">
+      <text>查看计算过程</text>
+      <text class="toggle-icon">{{showCalculationDetails ? '▲' : '▼'}}</text>
+    </view>
+
+    <view class="calculation-details" wx:if="{{showCalculationDetails}}">
+      <view class="calculation-item">
+        <text class="calculation-label">BMR计算：</text>
+        <text class="calculation-value">{{planData.calculationDetails.bmrFormula}}</text>
+      </view>
+      <view class="calculation-item">
+        <text class="calculation-label">TDEE计算：</text>
+        <text class="calculation-value">{{planData.calculationDetails.tdeeFormula}}</text>
+      </view>
+      <view class="calculation-item">
+        <text class="calculation-label">每日可摄入热量：</text>
+        <text class="calculation-value">{{planData.calculationDetails.dailyCaloriesFormula}}</text>
+      </view>
+      <view class="calculation-item">
+        <text class="calculation-label">高碳日营养素：</text>
+        <text class="calculation-value">{{planData.calculationDetails.highCarbFormula}}</text>
+      </view>
+      <view class="calculation-item">
+        <text class="calculation-label">低碳日营养素：</text>
+        <text class="calculation-value">{{planData.calculationDetails.lowCarbFormula}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">循环模式</view>
+    <view class="cycle-info">
+      <text class="cycle-text">{{planData.cycleInfo.lowCarbDaysCount}}个低碳日 + {{planData.cycleInfo.highCarbDaysCount}}个高碳日</text>
+      <view class="cycle-pattern">
+        <view wx:for="{{planData.cycleInfo.pattern}}" wx:key="index" class="cycle-day {{item === 'L' ? 'low-carb' : 'high-carb'}}">
+          {{item}}
+        </view>
+      </view>
+    </view>
+    
+    <view class="start-date">
+      <text class="start-date-label">开始日期：</text>
+      <text class="start-date-value">{{planData.cycleInfo.startDate}}</text>
+    </view>
+    
+    <!-- 月度日历预览 -->
+    <view class="month-calendar">
+      <view class="calendar-header">
+        <text wx:for="{{weekDays}}" wx:key="index" class="week-day-header">{{item}}</text>
+      </view>
+      <view class="calendar-body">
+        <view wx:for="{{calendarDays}}" wx:key="date" class="calendar-day {{item.type}} ">
+          <text class="calendar-date {{item.isStart ? 'start-res' : ''}}">{{item.day}}</text>
+        </view>
+      </view>
+    </view>
+    
+    <view class="calendar-legend">
+      <view class="legend-item">
+        <view class="legend-color high-carb"></view>
+        <text class="legend-text">高碳日</text>
+      </view>
+      <view class="legend-item">
+        <view class="legend-color low-carb"></view>
+        <text class="legend-text">低碳日</text>
+      </view>
+      <view class="legend-item">
+        <view class="legend-color start-date"></view>
+        <text class="legend-text">开始日期</text>
+      </view>
+    </view>
+  </view>
+  
+  <view class="card">
+    <view class="section-title">营养素详情</view>
+    
+    <!-- 高碳日详情 -->
+    <view class="day-details">
+      <view class="day-type-title high-carb">高碳日</view>
+      <view class="day-content">
+        <view class="nutrient-item">
+          <text class="nutrient-label">总热量</text>
+          <text class="nutrient-value">{{planData.dailyPlans.highCarbDay.calories}} 千卡</text>
+        </view>
+        <view class="nutrient-item">
+          <text class="nutrient-label">蛋白质</text>
+          <text class="nutrient-value">{{planData.dailyPlans.highCarbDay.protein.grams}}g ({{planData.dailyPlans.highCarbDay.protein.calories}}千卡)</text>
+        </view>
+        <view class="nutrient-item">
+          <text class="nutrient-label">碳水化合物</text>
+          <text class="nutrient-value">{{planData.dailyPlans.highCarbDay.carbs.grams}}g ({{planData.dailyPlans.highCarbDay.carbs.calories}}千卡)</text>
+        </view>
+        <view class="nutrient-item">
+          <text class="nutrient-label">脂肪</text>
+          <text class="nutrient-value">{{planData.dailyPlans.highCarbDay.fat.grams}}g ({{planData.dailyPlans.highCarbDay.fat.calories}}千卡)</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 低碳日详情 -->
+    <view class="day-details">
+      <view class="day-type-title low-carb">低碳日</view>
+      <view class="day-content">
+        <view class="nutrient-item">
+          <text class="nutrient-label">总热量</text>
+          <text class="nutrient-value">{{planData.dailyPlans.lowCarbDay.calories}} 千卡</text>
+        </view>
+        <view class="nutrient-item">
+          <text class="nutrient-label">蛋白质</text>
+          <text class="nutrient-value">{{planData.dailyPlans.lowCarbDay.protein.grams}}g ({{planData.dailyPlans.lowCarbDay.protein.calories}}千卡)</text>
+        </view>
+        <view class="nutrient-item">
+          <text class="nutrient-label">碳水化合物</text>
+          <text class="nutrient-value">{{planData.dailyPlans.lowCarbDay.carbs.grams}}g ({{planData.dailyPlans.lowCarbDay.carbs.calories}}千卡)</text>
+        </view>
+        <view class="nutrient-item">
+          <text class="nutrient-label">脂肪</text>
+          <text class="nutrient-value">{{planData.dailyPlans.lowCarbDay.fat.grams}}g ({{planData.dailyPlans.lowCarbDay.fat.calories}}千卡)</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- <view class="card tips-card">
+    <view class="section-title">营养建议</view>
+    <view class="tips-list">
+      <view class="tip-item">
+        <text class="dot">•</text>
+        <text class="tip-content">蛋白质来源建议：瘦肉、鱼类、鸡蛋、奶制品等</text>
+      </view>
+      <view class="tip-item">
+        <text class="dot">•</text>
+        <text class="tip-content">碳水化合物来源建议：全谷物、薯类、水果等</text>
+      </view>
+      <view class="tip-item">
+        <text class="dot">•</text>
+        <text class="tip-content">健康脂肪来源建议：坚果、橄榄油、鱼油等</text>
+      </view>
+      <view class="tip-item">
+        <text class="dot">•</text>
+        <text class="tip-content">建议训练前2-3小时适量补充碳水，训练后及时补充蛋白质</text>
+      </view>
+    </view>
+  </view> -->
+
+  <view class="action-buttons">
+    <button class="btn-primary" bindtap="copyPlan">复制计划文字</button>
+    <!-- <button class="btn-secondary" bindtap="syncToCalendar">同步到日历</button> -->
+  </view>
+</view> 

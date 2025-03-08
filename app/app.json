@@ -1,0 +1,15 @@
+{
+    "pages": [
+        "pages/welcome/index",
+        "pages/form/index",
+        "pages/result/index"
+    ],
+    "window": {
+        "backgroundTextStyle": "light",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTitleText": "碳循环刷脂计划",
+        "navigationBarTextStyle": "black"
+    },
+    "style": "v2",
+    "sitemapLocation": "sitemap.json"
+}

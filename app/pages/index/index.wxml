@@ -1,0 +1,151 @@
+<view class="container">
+  <view class="card">
+    <view class="title text-center">碳循环刷脂计划</view>
+    <view class="subtitle">基本信息</view>
+    
+    <view class="form-group">
+      <view class="form-label">性别</view>
+      <radio-group bindchange="onGenderChange">
+        <label class="radio-item">
+          <radio value="男" checked="{{gender === '男'}}" color="#1a73e8" />男
+        </label>
+        <label class="radio-item">
+          <radio value="女" checked="{{gender === '女'}}" color="#1a73e8" />女
+        </label>
+      </radio-group>
+    </view>
+    
+    <view class="form-group">
+      <view class="form-label">年龄 (岁)</view>
+      <slider min="18" max="80" value="{{age}}" show-value bindchange="onAgeChange" activeColor="#1a73e8" />
+    </view>
+    
+    <view class="form-group">
+      <view class="form-label">身高 (cm)</view>
+      <slider min="140" max="220" value="{{height}}" show-value bindchange="onHeightChange" activeColor="#1a73e8" />
+    </view>
+    
+    <view class="form-group">
+      <view class="form-label">体重 (kg)</view>
+      <slider min="40" max="150" value="{{weight}}" show-value bindchange="onWeightChange" activeColor="#1a73e8" />
+    </view>
+    
+    <view class="form-group">
+      <view class="form-label">体脂率 (%) (可选)</view>
+      <slider min="5" max="40" value="{{bodyFat}}" show-value bindchange="onBodyFatChange" activeColor="#1a73e8" />
+    </view>
+  </view>
+  
+  <view class="card">
+    <view class="subtitle">活动水平</view>
+    <radio-group bindchange="onActivityLevelChange">
+      <view class="radio-list">
+        <label class="radio-item">
+          <radio value="久坐" checked="{{activityLevel === '久坐'}}" color="#1a73e8" />
+          <view class="radio-label">
+            <text class="radio-title">久坐</text>
+            <text class="radio-desc">极少运动</text>
+          </view>
+        </label>
+        
+        <label class="radio-item">
+          <radio value="轻度活动" checked="{{activityLevel === '轻度活动'}}" color="#1a73e8" />
+          <view class="radio-label">
+            <text class="radio-title">轻度活动</text>
+            <text class="radio-desc">每周1-3天运动</text>
+          </view>
+        </label>
+        
+        <label class="radio-item">
+          <radio value="中度活动" checked="{{activityLevel === '中度活动'}}" color="#1a73e8" />
+          <view class="radio-label">
+            <text class="radio-title">中度活动</text>
+            <text class="radio-desc">每周3-5天运动</text>
+          </view>
+        </label>
+        
+        <label class="radio-item">
+          <radio value="高度活动" checked="{{activityLevel === '高度活动'}}" color="#1a73e8" />
+          <view class="radio-label">
+            <text class="radio-title">高度活动</text>
+            <text class="radio-desc">每周6-7天运动</text>
+          </view>
+        </label>
+        
+        <label class="radio-item">
+          <radio value="极高活动" checked="{{activityLevel === '极高活动'}}" color="#1a73e8" />
+          <view class="radio-label">
+            <text class="radio-title">极高活动</text>
+            <text class="radio-desc">体力劳动或高强度训练</text>
+          </view>
+        </label>
+      </view>
+    </radio-group>
+  </view>
+  
+  <view class="card">
+    <view class="subtitle">目标</view>
+    <radio-group bindchange="onGoalChange">
+      <view class="radio-list">
+        <label class="radio-item">
+          <radio value="减脂" checked="{{goal === '减脂'}}" color="#1a73e8" />
+          <view class="radio-label">
+            <text class="radio-title">减脂</text>
+          </view>
+        </label>
+        
+        <label class="radio-item">
+          <radio value="增肌" checked="{{goal === '增肌'}}" color="#1a73e8" />
+          <view class="radio-label">
+            <text class="radio-title">增肌</text>
+          </view>
+        </label>
+        
+        <label class="radio-item">
+          <radio value="维持体重" checked="{{goal === '维持体重'}}" color="#1a73e8" />
+          <view class="radio-label">
+            <text class="radio-title">维持体重</text>
+          </view>
+        </label>
+      </view>
+    </radio-group>
+  </view>
+  
+  <view class="card">
+    <view class="subtitle">训练安排</view>
+    <view class="form-group">
+      <view class="form-label">每周训练天数</view>
+      <slider min="1" max="7" value="{{trainingDays}}" show-value bindchange="onTrainingDaysChange" activeColor="#1a73e8" />
+    </view>
+    
+    <view class="form-group">
+      <view class="form-label">训练类型</view>
+      <radio-group bindchange="onTrainingTypeChange">
+        <view class="radio-list">
+          <label class="radio-item">
+            <radio value="力量训练" checked="{{trainingType === '力量训练'}}" color="#1a73e8" />
+            <view class="radio-label">
+              <text class="radio-title">力量训练</text>
+            </view>
+          </label>
+          
+          <label class="radio-item">
+            <radio value="有氧训练" checked="{{trainingType === '有氧训练'}}" color="#1a73e8" />
+            <view class="radio-label">
+              <text class="radio-title">有氧训练</text>
+            </view>
+          </label>
+          
+          <label class="radio-item">
+            <radio value="混合训练" checked="{{trainingType === '混合训练'}}" color="#1a73e8" />
+            <view class="radio-label">
+              <text class="radio-title">混合训练</text>
+            </view>
+          </label>
+        </view>
+      </radio-group>
+    </view>
+  </view>
+  
+  <button class="btn-primary" bindtap="generatePlan">生成碳循环计划</button>
+</view> 

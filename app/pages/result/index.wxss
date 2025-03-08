@@ -1,0 +1,337 @@
+.container {
+  padding: 30rpx;
+  background-color: #f5f5f5;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30rpx;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.subtitle {
+  font-size: 28rpx;
+  color: #666;
+  margin-top: 10rpx;
+}
+
+.card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+  border-bottom: 2rpx solid #f0f0f0;
+  padding-bottom: 15rpx;
+}
+
+.data-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.data-item {
+  background: #f8f8f8;
+  padding: 20rpx;
+  border-radius: 12rpx;
+}
+
+.data-label {
+  font-size: 24rpx;
+  color: #666;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.data-value {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: bold;
+}
+
+.calculation-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 0;
+  color: #666;
+  font-size: 28rpx;
+}
+
+.toggle-icon {
+  font-size: 24rpx;
+}
+
+.calculation-details {
+  background: #f8f8f8;
+  padding: 20rpx;
+  border-radius: 12rpx;
+  margin-top: 10rpx;
+}
+
+.calculation-item {
+  margin-bottom: 15rpx;
+  font-size: 24rpx;
+  color: #666;
+}
+
+.calculation-item:last-child {
+  margin-bottom: 0;
+}
+
+/* 循环模式样式 */
+.cycle-info {
+  margin-bottom: 30rpx;
+}
+
+.cycle-text {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 15rpx;
+  display: block;
+}
+
+.cycle-pattern {
+  display: flex;
+  justify-content: center;
+  gap: 10rpx;
+  margin: 20rpx 0;
+}
+
+.cycle-day {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  font-weight: bold;
+  color: #fff;
+}
+
+.cycle-day.high-carb {
+  background-color: #bcdbf1;
+}
+
+.cycle-day.low-carb {
+  background-color: #afe2b3;
+}
+
+.start-date {
+  text-align: center;
+  margin: 20rpx 0;
+  font-size: 28rpx;
+  color: #666;
+}
+
+/* 月度日历样式 */
+.month-calendar {
+  margin: 30rpx 0;
+  border: 2rpx solid #eee;
+  border-radius: 12rpx;
+  overflow: hidden;
+}
+
+.calendar-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: #f8f8f8;
+  padding: 15rpx 0;
+}
+
+.week-day-header {
+  text-align: center;
+  font-size: 24rpx;
+  color: #666;
+}
+
+.calendar-body {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2rpx;
+  background: #eee;
+  padding: 2rpx;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.calendar-date {
+  font-size: 24rpx;
+  color: #333;
+  z-index: 1;
+}
+
+.calendar-day.high-carb {
+  background-color: #cee6f7;
+}
+
+.calendar-day.low-carb {
+  background-color: #e8f5e9;
+}
+
+.calendar-date.today {
+  color: #fff;
+  background: #2196f3;
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calendar-date.start-res {
+  color: #333;
+  border: 1px solid #f0447d;
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 日历图例样式 */
+.calendar-legend {
+  display: flex;
+  justify-content: center;
+  gap: 30rpx;
+  margin-top: 20rpx;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.legend-color {
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 50%;
+}
+
+.legend-color.high-carb {
+  background-color: rgba(76, 175, 80, 0.1);
+  border: 2rpx solid #4caf50;
+}
+
+.legend-color.low-carb {
+  background-color: #90bad8;
+  border: 2rpx solid #2b71a3;
+}
+
+.legend-color.today {
+  background-color: #2196f3;
+}
+
+.legend-color.start-date {
+  /* background-color: #f0447d; */
+  border: 1px solid #f0447d ;
+}
+
+.legend-text {
+  font-size: 24rpx;
+  color: #666;
+}
+
+/* 营养素详情样式 */
+.day-details {
+  margin-bottom: 30rpx;
+}
+
+.day-details:last-child {
+  margin-bottom: 0;
+}
+
+.day-type-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  padding: 15rpx 20rpx;
+  border-radius: 8rpx;
+  margin-bottom: 15rpx;
+  color: #fff;
+}
+
+.day-type-title.high-carb {
+  background-color: #90bad8;
+}
+
+.day-type-title.low-carb {
+  background-color: #89ce8e;
+}
+
+.day-content {
+  background: #f8f8f8;
+  border-radius: 12rpx;
+  padding: 20rpx;
+}
+
+.nutrient-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15rpx;
+}
+
+.nutrient-item:last-child {
+  margin-bottom: 0;
+}
+
+.nutrient-label {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.nutrient-value {
+  font-size: 26rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 30rpx;
+}
+
+.btn-primary,
+.btn-secondary {
+  flex: 1;
+  padding: 20rpx;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  text-align: center;
+}
+
+.btn-primary {
+  background-color: #2196f3;
+  color: #fff;
+}
+
+.btn-secondary {
+  background-color: #f5f5f5;
+  color: #333;
+  border: 2rpx solid #ddd;
+}

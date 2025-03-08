@@ -1,0 +1,107 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30rpx 0;
+  background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.logo {
+  width: 160rpx;
+  height: 160rpx;
+  margin-bottom: 10rpx;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #1a73e8;
+  margin-bottom: 2rpx;
+}
+
+.subtitle {
+  font-size: 28rpx;
+  color: #666;
+  letter-spacing: 4rpx;
+}
+
+.content {
+  padding: 0 20rpx;
+  height: calc(100vh - 400rpx);
+  overflow: hidden;
+}
+
+.card {
+  margin-bottom: 20rpx;
+}
+
+.card-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+
+.card-content {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.6;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 12rpx;
+}
+
+.dot {
+  margin-right: 10rpx;
+  color: #1a73e8;
+}
+
+.feature-item {
+  margin-top: 16rpx;
+}
+
+.feature-title {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 6rpx;
+}
+
+.feature-desc {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.5;
+}
+
+.tips {
+  margin: 30rpx 0;
+  padding: 20rpx;
+  background-color: #f8f9fa;
+  border-radius: 12rpx;
+}
+
+.tips-title {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.tips-content {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* .btn-primary {
+  width: 90%;
+  margin: 0 auto;
+  position: fixed;
+  bottom: 150rpx;
+  left: 25%;
+} */
