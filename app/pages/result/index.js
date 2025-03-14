@@ -138,7 +138,8 @@ Page({
     // 填充日期
     for (let i = 1; i <= totalDays; i++) {
       const currentDate = new Date(start.getFullYear(), start.getMonth(), i)
-      const dayDiff = Math.floor((currentDate - start) / (1000 * 60 * 60 * 24)) + 1
+      const dayDiff =
+        Math.floor((currentDate - start) / (1000 * 60 * 60 * 24)) + 1
       const isToday = currentDate.toDateString() === today.toDateString()
       const isStart = i === start.getDate()
 
@@ -219,7 +220,7 @@ Page({
     }
 
     const plan = this.data.planData
-    const  calendarDays = this.data.calendarDays
+    const calendarDays = this.data.calendarDays
     let text = `碳循环计划
 
 基础数据：
@@ -230,22 +231,21 @@ Page({
 循环模式：${plan.cycleInfo.lowCarbDaysCount}低碳 + ${plan.cycleInfo.highCarbDaysCount}高碳
 开始日期：${plan.cycleInfo.startDate} \n \n
 `
-let lowcarbText = '低碳日：';
-  let highcarbText = '高碳日：';
+    let lowcarbText = "低碳日："
+    let highcarbText = "高碳日："
 
-for (let i=0; i< calendarDays.length; i++) {
-  
-  if(calendarDays[i].type == 'low-carb') {
-    lowcarbText +=  `${calendarDays[i].day}号  `
-  } else if (calendarDays[i].type == 'high-carb') {
-    highcarbText += `${calendarDays[i].day}号  `
-  }
-}
+    for (let i = 0; i < calendarDays.length; i++) {
+      if (calendarDays[i].type == "low-carb") {
+        lowcarbText += `${calendarDays[i].day}号  `
+      } else if (calendarDays[i].type == "high-carb") {
+        highcarbText += `${calendarDays[i].day}号  `
+      }
+    }
 
-text +=  `${lowcarbText} \n`
-text +=  `${highcarbText} \n`
+    text += `${lowcarbText} \n`
+    text += `${highcarbText} \n`
 
-text += `\n \n 高碳日营养素：
+    text += `\n \n 高碳日营养素：
 - 总热量：${plan.dailyPlans.highCarbDay.calories}千卡
 - 蛋白质：${plan.dailyPlans.highCarbDay.protein.grams}g (${plan.dailyPlans.highCarbDay.protein.calories}千卡)
 - 碳水：${plan.dailyPlans.highCarbDay.carbs.grams}g (${plan.dailyPlans.highCarbDay.carbs.calories}千卡)
@@ -308,5 +308,39 @@ text += `\n \n 高碳日营养素：
         })
       },
     })
+  },
+
+  // 分享给朋友
+  onShareAppMessage: function () {
+    if (this.data.planData) {
+      const plan = this.data.planData
+      return {
+        title: `我的碳循环刷脂计划：${plan.cycleInfo.lowCarbDaysCount}低+${plan.cycleInfo.highCarbDaysCount}高`,
+        path: "/pages/welcome/index",
+        imageUrl: "/images/share.png",
+      }
+    }
+    return {
+      title: "碳循环刷脂计划 - 科学减脂不反弹",
+      path: "/pages/welcome/index",
+      imageUrl: "/images/share.png",
+    }
+  },
+
+  // 分享到朋友圈
+  onShareTimeline: function () {
+    if (this.data.planData) {
+      const plan = this.data.planData
+      return {
+        title: `我的碳循环刷脂计划：${plan.cycleInfo.lowCarbDaysCount}低+${plan.cycleInfo.highCarbDaysCount}高，BMR:${plan.stats.bmr}，TDEE:${plan.stats.tdee}`,
+        query: "",
+        imageUrl: "/images/share.png",
+      }
+    }
+    return {
+      title: "碳循环刷脂计划 - 科学减脂不反弹",
+      query: "",
+      imageUrl: "/images/share.png",
+    }
   },
 })

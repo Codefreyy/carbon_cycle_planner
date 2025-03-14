@@ -16,6 +16,11 @@ Page({
     calculatedTDEE: 0,
     dailyCalories: 0,
 
+    // Tooltip 相关
+    showTooltip: false,
+    tooltipType: "",
+    tooltipTitle: "",
+
     // 活动系数
     activityFactors: {
       久坐: "1.2",
@@ -36,6 +41,7 @@ Page({
     highCarbCarbsPercentage: 0,
     highCarbFatPercentage: 0,
     highCarbTotalCalories: 0,
+    highCarbNutrientExceeded: false,
 
     // 低碳日营养素配置 (g/kg体重)
     lowCarbProtein: 2.2,
@@ -48,6 +54,7 @@ Page({
     lowCarbCarbsPercentage: 0,
     lowCarbFatPercentage: 0,
     lowCarbTotalCalories: 0,
+    lowCarbNutrientExceeded: false,
 
     // 碳水循环模式
     lowCarbDaysCount: 3,
@@ -410,31 +417,30 @@ Page({
     const proteinCalories = weight * highCarbProtein * 4
     const carbsCalories = weight * highCarbCarbs * 4
 
+    // 检查蛋白质和碳水热量是否超过每日总热量
+    const totalProteinCarbsCalories = proteinCalories + carbsCalories
+    const isExceeded = totalProteinCarbsCalories > dailyCalories
+
     // 剩余热量分配给脂肪
-    const remainingCalories = dailyCalories - proteinCalories - carbsCalories
-    const fatGrams = remainingCalories > 0 ? remainingCalories / 9 / weight : 0
+    const fatCalories = dailyCalories - proteinCalories - carbsCalories
+    const fatGramsPerKg = fatCalories > 0 ? fatCalories / (9 * weight) : 0
 
-    // 计算总热量和百分比
-    const totalCalories =
-      proteinCalories + carbsCalories + fatGrams * weight * 9
-    const proteinPercentage =
-      totalCalories > 0
-        ? Math.round((proteinCalories / totalCalories) * 100)
-        : 0
-    const carbsPercentage =
-      totalCalories > 0 ? Math.round((carbsCalories / totalCalories) * 100) : 0
-    const fatPercentage =
-      totalCalories > 0 ? 100 - proteinPercentage - carbsPercentage : 0
+    // 计算各营养素的百分比
+    const totalPercentage = (calories) =>
+      Math.round((calories / dailyCalories) * 100)
 
+    // 更新数据，确保总热量固定为 dailyCalories
     this.setData({
-      highCarbFat: fatGrams.toFixed(1),
       highCarbProteinCalories: Math.round(proteinCalories),
       highCarbCarbsCalories: Math.round(carbsCalories),
-      highCarbFatCalories: Math.round(fatGrams * weight * 9),
-      highCarbProteinPercentage: proteinPercentage,
-      highCarbCarbsPercentage: carbsPercentage,
-      highCarbFatPercentage: fatPercentage,
-      highCarbTotalCalories: Math.round(totalCalories),
+      highCarbFatCalories: Math.round(fatCalories),
+      highCarbProteinPercentage: totalPercentage(proteinCalories),
+      highCarbCarbsPercentage: totalPercentage(carbsCalories),
+      highCarbFatPercentage:
+        100 - totalPercentage(proteinCalories) - totalPercentage(carbsCalories),
+      highCarbTotalCalories: dailyCalories,
+      highCarbFat: fatGramsPerKg.toFixed(1),
+      highCarbNutrientExceeded: isExceeded,
     })
   },
 
@@ -442,35 +448,38 @@ Page({
   calculateLowCarbNutrition() {
     const { weight, dailyCalories, lowCarbProtein, lowCarbCarbs } = this.data
 
-    // 计算蛋白质和碳水的热量
+    // 计算蛋白质和碳水的热量（单位：大卡）
     const proteinCalories = weight * lowCarbProtein * 4
     const carbsCalories = weight * lowCarbCarbs * 4
 
-    // 剩余热量分配给脂肪
-    const remainingCalories = dailyCalories - proteinCalories - carbsCalories
-    const fatGrams = remainingCalories > 0 ? remainingCalories / 9 / weight : 0
+    // 检查蛋白质和碳水热量是否超过每日总热量
+    const totalProteinCarbsCalories = proteinCalories + carbsCalories
+    const isExceeded = totalProteinCarbsCalories > dailyCalories
 
-    // 计算总热量和百分比
-    const totalCalories =
-      proteinCalories + carbsCalories + fatGrams * weight * 9
-    const proteinPercentage =
-      totalCalories > 0
-        ? Math.round((proteinCalories / totalCalories) * 100)
-        : 0
-    const carbsPercentage =
-      totalCalories > 0 ? Math.round((carbsCalories / totalCalories) * 100) : 0
-    const fatPercentage =
-      totalCalories > 0 ? 100 - proteinPercentage - carbsPercentage : 0
+    // 直接确定脂肪热量，使得总热量固定为 dailyCalories
+    const fatCalories = dailyCalories - proteinCalories - carbsCalories
 
+    // 计算脂肪克数（以每公斤体重为单位）
+    const fatGramsPerKg = fatCalories > 0 ? fatCalories / (9 * weight) : 0
+
+    // 计算各营养素的百分比（四舍五入）
+    const proteinPercentage = Math.round(
+      (proteinCalories / dailyCalories) * 100
+    )
+    const carbsPercentage = Math.round((carbsCalories / dailyCalories) * 100)
+    const fatPercentage = Math.round((fatCalories / dailyCalories) * 100)
+
+    // 更新数据：确保 lowCarbTotalCalories 固定等于 dailyCalories
     this.setData({
-      lowCarbFat: fatGrams.toFixed(1),
+      lowCarbFat: fatGramsPerKg.toFixed(1),
       lowCarbProteinCalories: Math.round(proteinCalories),
       lowCarbCarbsCalories: Math.round(carbsCalories),
-      lowCarbFatCalories: Math.round(fatGrams * weight * 9),
+      lowCarbFatCalories: Math.round(fatCalories),
       lowCarbProteinPercentage: proteinPercentage,
       lowCarbCarbsPercentage: carbsPercentage,
       lowCarbFatPercentage: fatPercentage,
-      lowCarbTotalCalories: Math.round(totalCalories),
+      lowCarbTotalCalories: dailyCalories,
+      lowCarbNutrientExceeded: isExceeded,
     })
   },
 
@@ -645,13 +654,12 @@ Page({
 
   // 获取某一天的类型（高碳日或低碳日）
   getDayType(date, startDate, cyclePattern) {
- 
-  function setToMidnight(date) {
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  }
-  if (setToMidnight(date).getTime() < setToMidnight(startDate).getTime()) {
-    return "empty";
-  }
+    function setToMidnight(date) {
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate())
+    }
+    if (setToMidnight(date).getTime() < setToMidnight(startDate).getTime()) {
+      return "empty"
+    }
 
     // 计算从开始日期到当前日期的天数差
     const diffTime = Math.abs(date - startDate)
@@ -662,5 +670,46 @@ Page({
     const patternIndex = diffDays % cycleLength
 
     return cyclePattern[patternIndex] === "H" ? "high-carb" : "low-carb"
+  },
+
+  // 分享给朋友
+  onShareAppMessage: function () {
+    return {
+      title: "碳循环刷脂计划 - 定制你的专属减脂方案",
+      path: "/pages/welcome/index",
+      imageUrl: "/images/share.png", // 如果有分享图片的话
+    }
+  },
+
+  // 分享到朋友圈
+  onShareTimeline: function () {
+    return {
+      title: "碳循环刷脂计划 - 定制你的专属减脂方案",
+      query: "",
+      imageUrl: "/images/share.png", // 如果有分享图片的话
+    }
+  },
+
+  // Tooltip 相关方法
+  showProteinTooltip() {
+    this.setData({
+      showTooltip: true,
+      tooltipType: "protein",
+      tooltipTitle: "蛋白质摄入建议",
+    })
+  },
+
+  showCarbsTooltip() {
+    this.setData({
+      showTooltip: true,
+      tooltipType: "carbs",
+      tooltipTitle: "碳水化合物摄入建议",
+    })
+  },
+
+  hideTooltip() {
+    this.setData({
+      showTooltip: false,
+    })
   },
 })

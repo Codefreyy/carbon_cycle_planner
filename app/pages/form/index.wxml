@@ -130,8 +130,11 @@
     
     <view class="nutrition-content" wx:if="{{activeTab === 'high'}}">
       <view class="form-group">
-        <view class="form-label">蛋白质 (g/kg体重)</view>
-        <view class="form-desc">高碳日的蛋白质摄入量</view>
+        <view class="form-label">
+          蛋白质 (g/kg体重)
+          <text class="tooltip-icon" bindtap="showProteinTooltip">?</text>
+        </view>
+        <view class="form-desc">高碳日的蛋白质摄入量 <text class="form-tip">建议值：1.6-2.2 g/kg</text></view>
         <input class="form-input" type="digit" value="{{highCarbProtein}}" bindblur="onHighCarbProteinChange" placeholder="请输入蛋白质摄入量"/>
         <view class="nutrition-calories">
           <text>{{highCarbProteinCalories}} 千卡 ({{highCarbProteinPercentage}}%)</text>
@@ -140,8 +143,11 @@
       </view>
       
       <view class="form-group">
-        <view class="form-label">碳水化合物 (g/kg体重)</view>
-        <view class="form-desc">高碳日的碳水化合物摄入量</view>
+        <view class="form-label">
+          碳水化合物 (g/kg体重)
+          <text class="tooltip-icon" bindtap="showCarbsTooltip">?</text>
+        </view>
+        <view class="form-desc">高碳日的碳水化合物摄入量 <text class="form-tip">建议值：4-6 g/kg</text></view>
         <input class="form-input" type="digit" value="{{highCarbCarbs}}" bindblur="onHighCarbCarbsChange" placeholder="请输入碳水化合物摄入量"/>
         <view class="nutrition-calories">
           <text>{{highCarbCarbsCalories}} 千卡 ({{highCarbCarbsPercentage}}%)</text>
@@ -163,12 +169,19 @@
         <text class="total-label">总热量:</text>
         <text class="total-value">{{highCarbTotalCalories}} 千卡</text>
       </view>
+      
+      <view class="error-message" wx:if="{{highCarbNutrientExceeded}}">
+        <text>⚠️ 蛋白质和碳水热量已超过每日总热量，请适当减少摄入量</text>
+      </view>
     </view>
     
     <view class="nutrition-content" wx:if="{{activeTab === 'low'}}">
       <view class="form-group">
-        <view class="form-label">蛋白质 (g/kg体重)</view>
-        <view class="form-desc">低碳日的蛋白质摄入量</view>
+        <view class="form-label">
+          蛋白质 (g/kg体重)
+          <text class="tooltip-icon" bindtap="showProteinTooltip">?</text>
+        </view>
+        <view class="form-desc">低碳日的蛋白质摄入量 <text class="form-tip">建议值：2.0-2.5 g/kg</text></view>
         <input class="form-input" type="digit" value="{{lowCarbProtein}}" bindblur="onLowCarbProteinChange" placeholder="请输入蛋白质摄入量"/>
         <view class="nutrition-calories">
           <text>{{lowCarbProteinCalories}} 千卡 ({{lowCarbProteinPercentage}}%)</text>
@@ -177,8 +190,11 @@
       </view>
       
       <view class="form-group">
-        <view class="form-label">碳水化合物 (g/kg体重)</view>
-        <view class="form-desc">低碳日的碳水化合物摄入量</view>
+        <view class="form-label">
+          碳水化合物 (g/kg体重)
+          <text class="tooltip-icon" bindtap="showCarbsTooltip">?</text>
+        </view>
+        <view class="form-desc">低碳日的碳水化合物摄入量 <text class="form-tip">建议值：1-2 g/kg</text></view>
         <input class="form-input" type="digit" value="{{lowCarbCarbs}}" bindblur="onLowCarbCarbsChange" placeholder="请输入碳水化合物摄入量"/>
         <view class="nutrition-calories">
           <text>{{lowCarbCarbsCalories}} 千卡 ({{lowCarbCarbsPercentage}}%)</text>
@@ -199,6 +215,10 @@
       <view class="total-calories">
         <text class="total-label">总热量:</text>
         <text class="total-value">{{lowCarbTotalCalories}} 千卡</text>
+      </view>
+      
+      <view class="error-message" wx:if="{{lowCarbNutrientExceeded}}">
+        <text>⚠️ 蛋白质和碳水热量已超过每日总热量，请适当减少摄入量</text>
       </view>
     </view>
   </view>
@@ -280,4 +300,42 @@
   </view>
   
   <button class="btn-calculate" bindtap="calculateNutrition" wx:if="{{!showCalculationResult}}">计算营养需求</button>
+</view>
+
+<!-- Tooltip 弹窗 -->
+<view class="tooltip-modal" wx:if="{{showTooltip}}">
+  <view class="tooltip-content">
+    <view class="tooltip-header">
+      <text class="tooltip-title">{{tooltipTitle}}</text>
+      <text class="tooltip-close" bindtap="hideTooltip">×</text>
+    </view>
+    <view class="tooltip-body">
+      <block wx:if="{{tooltipType === 'protein'}}">
+        <view class="tooltip-section">
+          <view class="tooltip-subtitle">普遍推荐：</view>
+          <view class="tooltip-text">对于参与力量训练或希望保持/增加瘦体重的人群，建议摄入大约 1.8～2.2 克蛋白质／kg 体重。</view>
+        </view>
+        <view class="tooltip-section">
+          <view class="tooltip-subtitle">个体差异：</view>
+          <view class="tooltip-text">• 年龄较大或处于恢复期的人群可能需要略高一些的蛋白质以促进肌肉修复；</view>
+          <view class="tooltip-text">• 体重较大、肌肉量较多的人可能需要相应提高蛋白质摄入；</view>
+          <view class="tooltip-text">• 如果是减脂期，保持较高蛋白摄入有助于防止肌肉流失。</view>
+        </view>
+      </block>
+      <block wx:if="{{tooltipType === 'carbs'}}">
+        <view class="tooltip-section">
+          <view class="tooltip-subtitle">高碳日：</view>
+          <view class="tooltip-text">• 常见建议是 4～7 克／kg 体重，这个范围适用于训练量大、消耗较高的人群。</view>
+          <view class="tooltip-text">• 在高碳日中，充足的碳水可以为高强度训练提供能量，同时促进肌肉糖原的恢复。</view>
+        </view>
+        <view class="tooltip-section">
+          <view class="tooltip-subtitle">低碳日：</view>
+          <view class="tooltip-text">• 建议在 2～3 克／kg 体重左右，这有助于在休息或低强度训练日降低总热量摄入，从而促进脂肪燃烧。</view>
+        </view>
+        <view class="tooltip-section">
+          <view class="tooltip-text">对于有特殊需求的人群（如专业运动员或老年人），最好在营养师或专业人士的指导下进行个性化调整。</view>
+        </view>
+      </block>
+    </view>
+  </view>
 </view> 

@@ -482,3 +482,100 @@
   font-size: 22rpx;
   color: #666;
 }
+
+.form-tip {
+  color: #1a73e8;
+  font-size: 22rpx;
+  margin-left: 10rpx;
+}
+
+.error-message {
+  color: #e53935;
+  font-size: 24rpx;
+  margin-top: 20rpx;
+  padding: 10rpx;
+  background-color: rgba(229, 57, 53, 0.1);
+  border-radius: 8rpx;
+  text-align: center;
+}
+
+.tooltip-icon {
+  display: inline-block;
+  width: 36rpx;
+  height: 36rpx;
+  line-height: 36rpx;
+  text-align: center;
+  background-color: #1a73e8;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 24rpx;
+  margin-left: 10rpx;
+  vertical-align: middle;
+}
+
+.tooltip-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tooltip-content {
+  width: 80%;
+  max-height: 80%;
+  background-color: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.tooltip-header {
+  padding: 30rpx;
+  background-color: #f8f9fa;
+  border-bottom: 2rpx solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tooltip-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.tooltip-close {
+  font-size: 40rpx;
+  color: #999;
+  line-height: 1;
+}
+
+.tooltip-body {
+  padding: 30rpx;
+  overflow-y: auto;
+}
+
+.tooltip-section {
+  margin-bottom: 30rpx;
+}
+
+.tooltip-subtitle {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.tooltip-text {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 10rpx;
+}
