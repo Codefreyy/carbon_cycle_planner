@@ -248,56 +248,62 @@ Page({
   },
 
   generatePlan() {
+    // 验证表单
     if (!this.validateForm()) {
       return
     }
 
-    // 先计算营养需求
+    // 如果还没有计算营养需求，先计算
     if (!this.data.showCalculationResult) {
       this.calculateNutrition()
     }
 
+    // 构建用户数据
     const userData = {
       gender: this.data.gender,
       weight: this.data.weight,
       height: this.data.height,
       age: this.data.age,
       activityLevel: this.data.activityLevel,
+      activityFactors: this.data.activityFactors,
       calorieDeficit: this.data.calorieDeficit,
       calculatedBMR: this.data.calculatedBMR,
       calculatedTDEE: this.data.calculatedTDEE,
       dailyCalories: this.data.dailyCalories,
-      cyclePattern: this.data.cyclePattern.join(""),
+
+      // 循环模式数据
+      cyclePattern: this.data.cyclePattern,
       startDate: this.data.startDate,
       lowCarbDaysCount: this.data.lowCarbDaysCount,
       highCarbDaysCount: this.data.highCarbDaysCount,
-      nutritionConfig: {
-        highCarb: {
-          protein: parseFloat(this.data.highCarbProtein),
-          carbs: parseFloat(this.data.highCarbCarbs),
-          fat: parseFloat(this.data.highCarbFat),
-        },
-        lowCarb: {
-          protein: parseFloat(this.data.lowCarbProtein),
-          carbs: parseFloat(this.data.lowCarbCarbs),
-          fat: parseFloat(this.data.lowCarbFat),
-        },
-      },
+
+      // 高碳日营养素数据
+      highCarbProtein: this.data.highCarbProtein,
+      highCarbCarbs: this.data.highCarbCarbs,
+      highCarbFat: this.data.highCarbFat,
+      highCarbProteinCalories: this.data.highCarbProteinCalories,
+      highCarbCarbsCalories: this.data.highCarbCarbsCalories,
+      highCarbFatCalories: this.data.highCarbFatCalories,
+      highCarbTotalCalories: this.data.highCarbTotalCalories,
+
+      // 低碳日营养素数据
+      lowCarbProtein: this.data.lowCarbProtein,
+      lowCarbCarbs: this.data.lowCarbCarbs,
+      lowCarbFat: this.data.lowCarbFat,
+      lowCarbProteinCalories: this.data.lowCarbProteinCalories,
+      lowCarbCarbsCalories: this.data.lowCarbCarbsCalories,
+      lowCarbFatCalories: this.data.lowCarbFatCalories,
+      lowCarbTotalCalories: this.data.lowCarbTotalCalories,
     }
 
-    const plan = calculator.generateCarbCyclePlan(userData)
-    console.log("生成的计划数据：", plan)
+    console.log("生成计划数据:", userData)
 
+    // 跳转到结果页面
     wx.navigateTo({
       url: "/pages/result/index",
-      success: function (res) {
-        res.eventChannel.emit("acceptPlanData", {
-          ...plan,
-          cyclePattern: userData.cyclePattern,
-          startDate: userData.startDate,
-          lowCarbDaysCount: userData.lowCarbDaysCount,
-          highCarbDaysCount: userData.highCarbDaysCount,
-        })
+      success: (res) => {
+        // 通过eventChannel向结果页面传送数据
+        res.eventChannel.emit("acceptPlanData", userData)
       },
     })
   },

@@ -234,13 +234,13 @@
 }
 
 .legend-color.high-carb {
-  background-color: rgba(76, 175, 80, 0.1);
-  border: 2rpx solid #4caf50;
+  background-color: #90bad8;
+  border: 2rpx solid #2b71a3;
 }
 
 .legend-color.low-carb {
-  background-color: #90bad8;
-  border: 2rpx solid #2b71a3;
+  background-color: rgba(76, 175, 80, 0.1);
+  border: 2rpx solid #4caf50;
 }
 
 .legend-color.today {
@@ -249,7 +249,7 @@
 
 .legend-color.start-date {
   /* background-color: #f0447d; */
-  border: 1px solid #f0447d ;
+  border: 1px solid #f0447d;
 }
 
 .legend-text {

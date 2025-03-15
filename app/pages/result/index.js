@@ -31,79 +31,86 @@ Page({
     }
 
     try {
+      console.log("处理计划数据:", data)
+
       // 处理基础数据
       const stats = {
-        bmr: Math.round(data.stats.bmr),
-        tdee: Math.round(data.stats.tdee),
-        calorieDeficit: Math.round(data.stats.calorieDeficit),
-        dailyCalories: Math.round(data.stats.dailyCalories),
-      }
-
-      // 处理计算详情
-      const calculationDetails = {
-        bmrFormula: data.calculationDetails.bmrFormula,
-        tdeeFormula: data.calculationDetails.tdeeFormula,
-        dailyCaloriesFormula: data.calculationDetails.dailyCaloriesFormula,
-        highCarbFormula: data.calculationDetails.highCarbFormula,
-        lowCarbFormula: data.calculationDetails.lowCarbFormula,
+        bmr: Math.round(data.calculatedBMR || 0),
+        tdee: Math.round(data.calculatedTDEE || 0),
+        calorieDeficit: Math.round(data.calorieDeficit || 0),
+        dailyCalories: Math.round(data.dailyCalories || 0),
       }
 
       // 处理循环信息
       const cycleInfo = {
-        lowCarbDaysCount: data.lowCarbDaysCount,
-        highCarbDaysCount: data.highCarbDaysCount,
+        lowCarbDaysCount: data.lowCarbDaysCount || 0,
+        highCarbDaysCount: data.highCarbDaysCount || 0,
         pattern: Array.isArray(data.cyclePattern)
           ? data.cyclePattern
-          : data.cyclePattern.split(""),
-        startDate: data.startDate,
+          : (data.cyclePattern || "").split(""),
+        startDate: data.startDate || "",
       }
 
-      // 处理每日计划
-      const dailyPlans = {
-        highCarbDay: this.processMacros(data.dailyPlans.highCarbDay),
-        lowCarbDay: this.processMacros(data.dailyPlans.lowCarbDay),
+      // 处理每日计划 - 高碳日
+      const highCarbDay = {
+        calories: Math.round(data.highCarbTotalCalories || 0),
+        protein: {
+          grams: Math.round(data.weight * data.highCarbProtein || 0),
+          calories: Math.round(data.highCarbProteinCalories || 0),
+        },
+        carbs: {
+          grams: Math.round(data.weight * data.highCarbCarbs || 0),
+          calories: Math.round(data.highCarbCarbsCalories || 0),
+        },
+        fat: {
+          grams: Math.round(data.weight * data.highCarbFat || 0),
+          calories: Math.round(data.highCarbFatCalories || 0),
+        },
+      }
+
+      // 处理每日计划 - 低碳日
+      const lowCarbDay = {
+        calories: Math.round(data.lowCarbTotalCalories || 0),
+        protein: {
+          grams: Math.round(data.weight * data.lowCarbProtein || 0),
+          calories: Math.round(data.lowCarbProteinCalories || 0),
+        },
+        carbs: {
+          grams: Math.round(data.weight * data.lowCarbCarbs || 0),
+          calories: Math.round(data.lowCarbCarbsCalories || 0),
+        },
+        fat: {
+          grams: Math.round(data.weight * data.lowCarbFat || 0),
+          calories: Math.round(data.lowCarbFatCalories || 0),
+        },
+      }
+
+      // 生成计算详情
+      const calculationDetails = {
+        bmrFormula: `9.99 × ${data.weight} + 6.25 × ${data.height} - 4.92 × ${
+          data.age
+        } + (166 × ${data.gender === "男" ? 1 : 0} - 161) = ${stats.bmr}`,
+        tdeeFormula: `${stats.bmr} × ${
+          data.activityFactors[data.activityLevel]
+        } = ${stats.tdee}`,
+        dailyCaloriesFormula: `${stats.tdee} - ${stats.calorieDeficit} = ${stats.dailyCalories}`,
+        highCarbFormula: `高碳日：蛋白质 ${data.highCarbProtein}g/kg × ${data.weight}kg = ${highCarbDay.protein.grams}g (${highCarbDay.protein.calories}千卡)，碳水 ${data.highCarbCarbs}g/kg × ${data.weight}kg = ${highCarbDay.carbs.grams}g (${highCarbDay.carbs.calories}千卡)，脂肪 ${data.highCarbFat}g/kg × ${data.weight}kg = ${highCarbDay.fat.grams}g (${highCarbDay.fat.calories}千卡)`,
+        lowCarbFormula: `低碳日：蛋白质 ${data.lowCarbProtein}g/kg × ${data.weight}kg = ${lowCarbDay.protein.grams}g (${lowCarbDay.protein.calories}千卡)，碳水 ${data.lowCarbCarbs}g/kg × ${data.weight}kg = ${lowCarbDay.carbs.grams}g (${lowCarbDay.carbs.calories}千卡)，脂肪 ${data.lowCarbFat}g/kg × ${data.weight}kg = ${lowCarbDay.fat.grams}g (${lowCarbDay.fat.calories}千卡)`,
       }
 
       return {
         stats,
         calculationDetails,
         cycleInfo,
-        dailyPlans,
+        dailyPlans: {
+          highCarbDay,
+          lowCarbDay,
+        },
       }
     } catch (error) {
       console.error("处理计划数据时出错：", error)
       return null
     }
-  },
-
-  processMacros: function (plan) {
-    if (!plan) return null
-
-    return {
-      calories: Math.round(plan.calories),
-      protein: {
-        grams: Math.round(plan.protein.grams),
-        calories: Math.round(plan.protein.calories),
-      },
-      carbs: {
-        grams: Math.round(plan.carbs.grams),
-        calories: Math.round(plan.carbs.calories),
-      },
-      fat: {
-        grams: Math.round(plan.fat.grams),
-        calories: Math.round(plan.fat.calories),
-      },
-    }
-  },
-
-  formatMacroFormula: function (plan) {
-    if (!plan) return ""
-
-    return (
-      `蛋白质${plan.protein.grams}g (${plan.protein.calories}千卡), ` +
-      `碳水${plan.carbs.grams}g (${plan.carbs.calories}千卡), ` +
-      `脂肪${plan.fat.grams}g (${plan.fat.calories}千卡)`
-    )
   },
 
   generateCalendar: function (startDate, pattern) {
@@ -175,7 +182,6 @@ Page({
     const start = new Date(startDate)
     const weeks = []
     let currentWeek = []
-    let dayCount = 0
 
     // 计算第一周开始前需要补充的天数
     const firstDayWeek = start.getDay()
@@ -194,7 +200,6 @@ Page({
       const dayType = pattern[patternIndex] === "H" ? "高" : "低"
 
       currentWeek.push(dayType)
-      dayCount++
 
       // 一周结束或者达到28天
       if (currentDate.getDay() === 6 || i === 27) {
@@ -220,8 +225,50 @@ Page({
     }
 
     const plan = this.data.planData
-    const calendarDays = this.data.calendarDays
-    let text = `碳循环计划
+    const startDate = new Date(plan.cycleInfo.startDate)
+    const pattern = plan.cycleInfo.pattern
+
+    // 获取当月的最后一天
+    const lastDayOfMonth = new Date(
+      startDate.getFullYear(),
+      startDate.getMonth() + 1,
+      0
+    ).getDate()
+
+    // 计算从开始日期到月底的天数
+    const daysInMonth = lastDayOfMonth - startDate.getDate() + 1
+
+    // 生成当月的计划日期
+    const highCarbDates = []
+    const lowCarbDates = []
+
+    for (let i = 0; i < daysInMonth; i++) {
+      const currentDate = new Date(startDate)
+      currentDate.setDate(startDate.getDate() + i)
+
+      // 调整pattern索引确保从低碳日开始
+      const adjustedDay = i + (pattern[0] === "H" ? pattern.length - 1 : 0)
+      const patternIndex = adjustedDay % pattern.length
+      const isHighCarb = pattern[patternIndex] === "H"
+
+      // 格式化日期为 "M月D日"
+      const month = currentDate.getMonth() + 1
+      const day = currentDate.getDate()
+      const formattedDate = `${month}月${day}日`
+
+      if (isHighCarb) {
+        highCarbDates.push(formattedDate)
+      } else {
+        lowCarbDates.push(formattedDate)
+      }
+    }
+
+    // 生成简单的日期列表
+    let planText = "\n计划安排：\n"
+    planText += `高碳日：${highCarbDates.join("，")}\n`
+    planText += `低碳日：${lowCarbDates.join("，")}\n`
+
+    const text = `以下是您的当月碳循环计划：
 
 基础数据：
 - BMR：${plan.stats.bmr}千卡
@@ -229,23 +276,9 @@ Page({
 - 每日摄入：${plan.stats.dailyCalories}千卡
 
 循环模式：${plan.cycleInfo.lowCarbDaysCount}低碳 + ${plan.cycleInfo.highCarbDaysCount}高碳
-开始日期：${plan.cycleInfo.startDate} \n \n
-`
-    let lowcarbText = "低碳日："
-    let highcarbText = "高碳日："
+开始日期：${plan.cycleInfo.startDate}${planText}
 
-    for (let i = 0; i < calendarDays.length; i++) {
-      if (calendarDays[i].type == "low-carb") {
-        lowcarbText += `${calendarDays[i].day}号  `
-      } else if (calendarDays[i].type == "high-carb") {
-        highcarbText += `${calendarDays[i].day}号  `
-      }
-    }
-
-    text += `${lowcarbText} \n`
-    text += `${highcarbText} \n`
-
-    text += `\n \n 高碳日营养素：
+高碳日营养素：
 - 总热量：${plan.dailyPlans.highCarbDay.calories}千卡
 - 蛋白质：${plan.dailyPlans.highCarbDay.protein.grams}g (${plan.dailyPlans.highCarbDay.protein.calories}千卡)
 - 碳水：${plan.dailyPlans.highCarbDay.carbs.grams}g (${plan.dailyPlans.highCarbDay.carbs.calories}千卡)
