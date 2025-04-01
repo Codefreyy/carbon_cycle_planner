@@ -3,9 +3,9 @@ const calculator = require("../../utils/calculator")
 Page({
   data: {
     gender: "女",
-    age: 24,
-    height: 163,
-    weight: 57,
+    age: 28,
+    height: 166,
+    weight: 63,
     bodyFat: "",
     activityLevel: "中度活动",
     calorieDeficit: 500,
